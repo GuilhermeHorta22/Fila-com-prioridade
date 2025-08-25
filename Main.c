@@ -24,13 +24,13 @@ filaP *criaCaixa(int info, int prior)
 	nova->info = info;
 	nova->prior = prior;
 	nova->prox = NULL;
-	return NULL;
+	return nova;
 }
 
 //inserir um elemento na fila
 void enqueue(filaP **fp, int info, int prioridade)
 {
-	filaP *aux, *ant, *nova = criaNova(info,prioridade);
+	filaP *aux, *ant = NULL, *nova = criaCaixa(info,prioridade);
 	
 	if(*fp == NULL || prioridade < (*fp)->prior)
 	{
@@ -70,4 +70,47 @@ void dequeue(filaP **fp, int *info, int *prioridade)
 		*fp = aux->prox;
 		free(aux);
 	}
+}
+
+//exibe fila
+void exibe(filaP *fp)
+{
+	printf("\n");
+	while(fp != NULL)
+	{
+		printf("%d - %d\t|\t",fp->info,fp->prior);
+		fp = fp->prox;
+	}
+}
+
+int main(void)
+{
+	filaP *fp;
+	int info, prioridade;
+	
+	init(&fp);
+	
+	if(isEmpty(fp))
+		printf("\nFila Vazia!"); //vai ser vazia
+	else
+		printf("\nFila com informacao!");
+	
+	enqueue(&fp,9,3);   // 4º
+	enqueue(&fp,7,1);   // 1º
+	enqueue(&fp,10,3);  // 3º
+	enqueue(&fp,8,2);   // 2º
+	
+	exibe(fp); //7, 8, 9, 10
+	
+	dequeue(&fp,&info,&prioridade);
+	printf("\nInfo: %d | Prioridade: %d",info,prioridade); //7 | 1
+	
+	exibe(fp); //8, 10, 9
+	
+	dequeue(&fp,&info,&prioridade);
+	printf("\nInfo: %d | Prioridade: %d",info,prioridade); //8 | 2
+	
+	exibe(fp); //10, 9
+	
+	getch();
 }
